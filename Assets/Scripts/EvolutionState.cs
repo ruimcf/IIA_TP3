@@ -13,6 +13,9 @@ public class EvolutionState : MonoBehaviour {
 	public int numTrackPoints;
 	private ProblemInfo info;
 
+    public int tournament_size;
+    public float tournament_prob;
+
 
 	public int numGenerations;
 	public int populationSize;
@@ -46,7 +49,7 @@ public class EvolutionState : MonoBehaviour {
 		info.startVelocity = startVelocity;
 		info.numTrackPoints = numTrackPoints;
 
-		randomSelection = new RandomSelection (); //change accordingly
+		randomSelection = new TournamentSelection (tournament_size,tournament_prob); //change accordingly
 		stats = new StatisticsLogger (statsFilename);
 
 		drawer = new PolygonGenerator ();
