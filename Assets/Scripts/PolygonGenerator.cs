@@ -7,7 +7,7 @@ public class PolygonGenerator {
 	private Vector2 startposition;
 	private Vector2[] vertices2D;
 
-
+    //desenha a linha 
 	public void drawCurve (Dictionary<float,float>trackpoints,ProblemInfo info) {
 
 		vertices2D = new Vector2[trackpoints.Count*2];
@@ -44,11 +44,13 @@ public class PolygonGenerator {
 		Renderer rend = curve.AddComponent(typeof(MeshRenderer)) as Renderer;
 		MeshFilter filter = curve.AddComponent(typeof(MeshFilter)) as MeshFilter;
 		filter.mesh = msh;
-		rend.material.SetColor("_Color", Color.black);
+        //define a cor da linha, RED == SWAG
+		rend.material.SetColor("_Color", Color.red);
 		curve.AddComponent (typeof(MeshCollider));
 		}
 }
 
+//não faço ideia o que e que isto faz, assim como as funçoes que estao para baixo (é tudo do mesmo)
 public class Triangulator
 {
 	private List<Vector2> m_points = new List<Vector2>();
