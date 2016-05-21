@@ -29,7 +29,7 @@ public class BrachystochroneProblem {
 		info = inf;
 	}
 
-
+	//calcula os tempos e as velocidades na linha que foi determinada, que ta no trackpoints
 	public FitnessInfo evaluate(Dictionary<float,float>trackpoints) {
 
 		FitnessInfo eval = new FitnessInfo ();
@@ -42,27 +42,30 @@ public class BrachystochroneProblem {
 
 		float pointA = pointsX [0];
 		float velocity = info.startVelocity;
-
+			//ponto A: ponto anterior
+        	//ponto B: novo ponto
 		for (int i=1;i<pointsX.Count;i++) {
-
+			
 			float pointB = pointsX[i];
 
 			float dX = pointB-pointA;
 			float dY = trackpoints[pointB]-trackpoints[pointA];
 			float l = Mathf.Sqrt (dX*dX + dY*dY);
-
+			//partime = tempo que demora a passar o caminho A->B
+            //caso dy = 0 -> linha horizontal, não é necessario calcular os angulos
 			if (dY != 0) {
 				ParTime = (-velocity + Mathf.Sqrt (velocity*velocity + 2 * info.g * dY)) / ((info.g * dY) / l);
 			} else {
 				ParTime = l / velocity;
 			}
-
+			//fudeu
 			if (ParTime <= 0) {
 				eval.time=Mathf.Infinity;
 				return eval;
 			}
 
 			velocity += (info.g*dY) / l * ParTime;
+			//fudeu
 			if(velocity<0) {
 				eval.time=Mathf.Infinity;
 				return eval;
