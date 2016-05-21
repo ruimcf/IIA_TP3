@@ -41,7 +41,6 @@ public class TournamentSelection : SelectionMethod {
                 }
                 tournament.Add(ind.Clone());
             }
-            Individual escolhido = null;
 
             //ordenar a lista de elementos do torneio pelo seu time
             tournament.Sort(SortByEval);

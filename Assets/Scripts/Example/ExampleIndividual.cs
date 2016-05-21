@@ -28,8 +28,11 @@ public class ExampleIndividual : Individual {
 		NewValueMutation (probability);
 	}
 
-	public override void Crossover(Individual partner, float probability) {
-		HalfCrossover (partner, probability);
+	public override void Crossover(Individual partner, float probability,int nPoints) {
+		if(nPoints>2)
+			N_PointCrossover(partner,probability,nPoints);
+		else
+			HalfCrossover (partner, probability);
 	}
 
 	public override void CalcTrackPoints() {
@@ -89,6 +92,21 @@ public class ExampleIndividual : Individual {
 			partner.trackPoints[keys[i]]=tmp;
 		}
 
+	}
+
+
+	void N_PointCrossover(Individual partner, float probability,int nPoints){
+		if (UnityEngine.Random.Range (0f, 1f) > probability) {
+			return;
+		}
+		List<float> keys = new List<float>(trackPoints.Keys);
+		for(int i=0;i<info.numTrackPoints;i+=(nPoints*2)){
+			for(int j=0;j<nPoints && j<info.numTrackPoints;j++){
+				float tmp = trackPoints[keys[i+j]];
+				trackPoints[keys[i+j]] = partner.trackPoints[keys[i+j]];
+				partner.trackPoints[keys[i+j]]=tmp;
+			}
+		}
 	}
 
 

@@ -22,6 +22,8 @@ public class EvolutionState : MonoBehaviour {
 	public float mutationProbability;
 	public float crossoverProbability;
 
+	public int numberOfCrossoverPoints;
+
 	private List<Individual> population;
 	private SelectionMethod randomSelection;
 
@@ -132,7 +134,7 @@ public class EvolutionState : MonoBehaviour {
 
 			//apply crossover between pairs of individuals and mutation to each one
 			while(selectedInds.Count>1) {
-				selectedInds[0].Crossover(selectedInds[1],crossoverProbability);
+				selectedInds[0].Crossover(selectedInds[1],crossoverProbability,numberOfCrossoverPoints);
 				selectedInds[0].Mutate(mutationProbability);
 				selectedInds[1].Mutate(mutationProbability);
 				selectedInds.RemoveRange(0,2);
