@@ -49,7 +49,7 @@ public class EvolutionState : MonoBehaviour {
 		info.startVelocity = startVelocity;
 		info.numTrackPoints = numTrackPoints;
 
-		randomSelection = new TournamentSelection (tournament_size,tournament_prob); //change accordingly
+		randomSelection = new RouletteSelection(); //change accordingly
 		stats = new StatisticsLogger (statsFilename);
 
 		drawer = new PolygonGenerator ();

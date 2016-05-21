@@ -49,7 +49,7 @@ public class ExampleIndividual : Individual {
 	}
 
 
-    //cria uma nova linha, totalmente random acho eu, com limites MaxY e MinY
+
 	void RandomInitialization() {
 		float step = (info.endPointX - info.startPointX ) / (info.numTrackPoints - 1);
 		float y = 0;
@@ -75,7 +75,6 @@ public class ExampleIndividual : Individual {
 		}
 	}
 
-    //recombinaçao de metade entre dois individuos
 	void HalfCrossover(Individual partner, float probability) {
 
 		if (UnityEngine.Random.Range (0f, 1f) > probability) {
