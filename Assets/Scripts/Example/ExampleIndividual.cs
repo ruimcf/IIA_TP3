@@ -77,8 +77,39 @@ public class ExampleIndividual : Individual {
 			}
 		}
 	}
-	//recombinaçao de metade entre dois individuos
-	void HalfCrossover(Individual partner, float probability) {
+
+    void GaussianMutation(float probability)
+    {
+        List<float> keys = new List<float>(trackPoints.Keys);
+        foreach (float x in keys)
+        {
+            //make sure that the startpoint and the endpoint are not mutated 
+            if (Math.Abs(x - info.startPointX) < 0.01 || Math.Abs(x - info.endPointX) < 0.01)
+            {
+                continue;
+            }
+            if (UnityEngine.Random.Range(0f, 1f) < probability)
+            {
+                float mean = trackPoints[x];
+
+                float sigma = (MaxY - mean) / 3;
+                float value = (NextGaussianDouble() * sigma + mean);
+                if (value < MinY)
+                {
+                    value = MinY;
+                }
+                else if (value > MaxY)
+                {
+                    value = MaxY;
+                }
+
+                trackPoints[x] = value;
+            }
+        }
+    }
+
+    //recombinaçao de metade entre dois individuos
+    void HalfCrossover(Individual partner, float probability) {
 
 		if (UnityEngine.Random.Range (0f, 1f) > probability) {
 			return;
@@ -109,5 +140,20 @@ public class ExampleIndividual : Individual {
 		}
 	}
 
+    public float NextGaussianDouble()
+    {
+        double u, v, S;
+
+        do
+        {
+            u = 2.0 * UnityEngine.Random.value - 1.0;
+            v = 2.0 * UnityEngine.Random.value - 1.0;
+            S = u * u + v * v;
+        }
+        while (S >= 1.0);
+
+        double fac = Math.Sqrt(-2.0 * Math.Log(S) / S);
+        return (float)(u * fac);
+    }
 
 }

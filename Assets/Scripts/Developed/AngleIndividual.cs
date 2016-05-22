@@ -25,6 +25,13 @@ public class AngleIndividual : Individual {
     public override void Initialize()
     {
         AngleInitialization();
+        string angulos = "";
+
+        foreach(float x in angles)
+        {
+            angulos += "| " + x;
+        }
+        Debug.Log("Novo individuo: "+angulos);
     }
 
     public override void Mutate(float probability)
@@ -90,10 +97,35 @@ public class AngleIndividual : Individual {
         angles = new List<float>();
         float y = 0;
 
-        for (int i = 0; i < info.numTrackPoints - 3; i++)
+        for (int i = 0; i < info.numTrackPoints-2; i++)
         {
             y = NormalizedRandom(0, 180);
             angles.Add(y);
+        }
+    }
+
+
+    void GaussianMutation(float probability)
+    {
+        for(int i = 0; i < angles.Count; i++)
+        {
+            if (UnityEngine.Random.Range(0f, 1f) < probability)
+            {
+                float maximum = 180, minimum = 0;
+                float mean = angles[i];
+                float sigma = (maximum - mean) / 3;
+                float value = (NextGaussianDouble() * sigma + mean);
+                if (value < minimum)
+                {
+                    value = minimum;
+                }
+                else if (value > maximum)
+                {
+                    value = maximum;
+                }
+
+                angles[i] = value;
+            }
         }
     }
 
@@ -150,6 +182,10 @@ public class AngleIndividual : Individual {
     public float NormalizedRandom(float minimum, float maximum)
     {
         float mean = (maximum + minimum) / 2;
+        mean -= Mathf.Rad2Deg * Mathf.Atan((info.startPointY - info.endPointY) / (info.endPointX - info.startPointX));
+        //Debug.Log(Mathf.Rad2Deg * Mathf.Atan((info.startPointY - info.endPointY) / (info.endPointX - info.startPointX)));
+
+
         float sigma = (maximum - mean) / 3;
         float value = (NextGaussianDouble() * sigma + mean);
         if(value < minimum)
