@@ -51,7 +51,7 @@ public class EvolutionState : MonoBehaviour {
 		info.startVelocity = startVelocity;
 		info.numTrackPoints = numTrackPoints;
 
-		randomSelection = new RouletteSelection(); //change accordingly
+		randomSelection = new TournamentSelection(tournament_size,tournament_prob); //change accordingly
 		stats = new StatisticsLogger (statsFilename);
 
 		drawer = new PolygonGenerator ();
@@ -110,7 +110,7 @@ public class EvolutionState : MonoBehaviour {
 	void InitPopulation () {
 		population = new List<Individual>();
 		while (population.Count<populationSize) {
-			ExampleIndividual newind = new ExampleIndividual(info); //change accordingly
+			AngleIndividual newind = new AngleIndividual(info); //change accordingly
 			newind.Initialize();
 			population.Add (newind);
 		}

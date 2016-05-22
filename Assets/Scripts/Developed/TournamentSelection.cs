@@ -74,6 +74,6 @@ public class TournamentSelection : SelectionMethod {
 
     static int SortByEval(Individual inv1, Individual inv2)
     {
-        return inv1.eval.time.CompareTo(inv2.eval.time);
+        return inv1.fitness.CompareTo(inv2.fitness);
     }
 }
