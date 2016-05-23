@@ -16,6 +16,9 @@ public class EvolutionState : MonoBehaviour {
     public int tournament_size;
     public float tournament_prob;
 
+    public int IndividualType;
+    public int SelectionType;
+    public int MutationType;
 
 	public int numGenerations;
 	public int populationSize;
@@ -52,7 +55,22 @@ public class EvolutionState : MonoBehaviour {
 		info.startVelocity = startVelocity;
 		info.numTrackPoints = numTrackPoints;
 
-		randomSelection = new TournamentSelection(tournament_size,tournament_prob); //change accordingly
+        switch (SelectionType)
+        {
+            case 1:
+                randomSelection = new RandomSelection();
+                break;
+            case 2:
+                randomSelection = new TournamentSelection(tournament_size, tournament_prob);
+                break;
+            case 3:
+                randomSelection = new RouletteSelection();
+                break;
+            default:
+                randomSelection = null;
+                throw new System.Exception("Inserir Seletion Type valido:\t1-Random\t2-Tournament\t3-Roulette");
+        }
+       
 		stats = new StatisticsLogger (statsFilename);
 
 		drawer = new PolygonGenerator ();
@@ -124,7 +142,19 @@ public class EvolutionState : MonoBehaviour {
 	void InitPopulation () {
 		population = new List<Individual>();
 		while (population.Count<populationSize) {
-			AngleIndividual newind = new AngleIndividual(info); //change accordingly
+            Individual newind = null;
+            switch (IndividualType)
+            {
+                case 1:
+                    newind = new ExampleIndividual(info);
+                    break;
+                case 2:
+                    newind = new AngleIndividual(info);
+                    break;
+                default:
+                    throw new System.Exception("Inserir Individual Type valido:\t1-Example Individual\t2-Angle Individual");
+            }
+			 //change accordingly
 			newind.Initialize();
 			population.Add (newind);
 		}
@@ -152,12 +182,12 @@ public class EvolutionState : MonoBehaviour {
 			//apply crossover between pairs of individuals and mutation to each one
 			while(selectedInds.Count>1) {
 				selectedInds[0].Crossover(selectedInds[1],crossoverProbability,numberOfCrossoverPoints);
-				selectedInds[0].Mutate(mutationProbability);
-				selectedInds[1].Mutate(mutationProbability);
+				selectedInds[0].Mutate(mutationProbability,MutationType);
+				selectedInds[1].Mutate(mutationProbability,MutationType);
 				selectedInds.RemoveRange(0,2);
 			}
 			if(selectedInds.Count==1) {
-				selectedInds[0].Mutate(mutationProbability);
+				selectedInds[0].Mutate(mutationProbability,MutationType);
 				selectedInds.RemoveAt(0);
 			}
 		}

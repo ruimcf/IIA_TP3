@@ -24,9 +24,19 @@ public class ExampleIndividual : Individual {
 		RandomInitialization();
 	}
 
-	public override void Mutate(float probability) {
-		NewValueMutation (probability);
-	}
+	public override void Mutate(float probability, int MutationType) {
+        switch (MutationType)
+        {
+            case 1:
+                NewValueMutation(probability);
+                break;
+            case 2:
+                GaussianMutation(probability);
+                break;
+            default:
+                throw new System.Exception("Inserir Mutation Type valido:\t1-Random\t2-Gaussian Mutation");
+        }
+    }
 
 	public override void Crossover(Individual partner, float probability,int nPoints) {
 		if(nPoints>2)
