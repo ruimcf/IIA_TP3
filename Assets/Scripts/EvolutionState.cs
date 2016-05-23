@@ -88,7 +88,8 @@ public class EvolutionState : MonoBehaviour {
 			
 			//if all individuals have been evaluated on the current generation, breed a new population
 			if(evaluatedIndividuals==populationSize) {
-				stats.PostGenLog(population,currentGeneration);
+                population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
+                stats.PostGenLog(population,currentGeneration);
 				
 				population = BreedPopulation();
 				evaluatedIndividuals=0;
@@ -114,7 +115,6 @@ public class EvolutionState : MonoBehaviour {
         for(int i = 0; i < ElitismNumber; i++)
         {
             best_individual.Add(population[i].Clone());
-            Debug.Log("Adicionar Elemento Macho, fitness = " + population[i].fitness);
         }
 
         return best_individual;
@@ -124,7 +124,7 @@ public class EvolutionState : MonoBehaviour {
 	void InitPopulation () {
 		population = new List<Individual>();
 		while (population.Count<populationSize) {
-			ExampleIndividual newind = new ExampleIndividual(info); //change accordingly
+			AngleIndividual newind = new AngleIndividual(info); //change accordingly
 			newind.Initialize();
 			population.Add (newind);
 		}
@@ -135,12 +135,7 @@ public class EvolutionState : MonoBehaviour {
 		List<Individual> newpop = new List<Individual>();
 
         //vai buscar os X melhores elementos da pop atual para a nova
-        population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
-        for (int i = 0; i < ElitismNumber; i++)
-        {
-            newpop.Add(population[i].Clone());
-            //Debug.Log("Adicionar Elemento Macho, fitness = " + population[i].fitness);
-        }
+        newpop = Elitism();
 
         //breed individuals and place them on new population. We'll apply crossover and mutation later 
         while (newpop.Count<populationSize) {

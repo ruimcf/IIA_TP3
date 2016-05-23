@@ -31,7 +31,6 @@ public class AngleIndividual : Individual {
         {
             angulos += "| " + x;
         }
-        Debug.Log("Novo individuo: "+angulos);
     }
 
     public override void Mutate(float probability)
@@ -86,6 +85,7 @@ public class AngleIndividual : Individual {
         AngleIndividual newobj = (AngleIndividual)this.MemberwiseClone();
         newobj.fitness = 0f;
         newobj.trackPoints = new Dictionary<float, float>(this.trackPoints);
+        newobj.angles = new List<float>(this.angles);
         return newobj;
     }
 
