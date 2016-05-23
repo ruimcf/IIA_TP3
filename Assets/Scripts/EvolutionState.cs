@@ -23,7 +23,7 @@ public class EvolutionState : MonoBehaviour {
 	public float crossoverProbability;
 
 	public int numberOfCrossoverPoints;
-
+    public int ElitismNumber;
 	private List<Individual> population;
 	private SelectionMethod randomSelection;
 
@@ -33,6 +33,7 @@ public class EvolutionState : MonoBehaviour {
 
 	private StatisticsLogger stats;
 	public string statsFilename;
+
 
 	private PolygonGenerator drawer;
 
@@ -106,11 +107,24 @@ public class EvolutionState : MonoBehaviour {
 	
 	}
 
+    List<Individual> Elitism()
+    {
+        List<Individual> best_individual = new List<Individual>();
+        population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
+        for(int i = 0; i < ElitismNumber; i++)
+        {
+            best_individual.Add(population[i].Clone());
+            Debug.Log("Adicionar Elemento Macho, fitness = " + population[i].fitness);
+        }
+
+        return best_individual;
+    }
+
 
 	void InitPopulation () {
 		population = new List<Individual>();
 		while (population.Count<populationSize) {
-			AngleIndividual newind = new AngleIndividual(info); //change accordingly
+			ExampleIndividual newind = new ExampleIndividual(info); //change accordingly
 			newind.Initialize();
 			population.Add (newind);
 		}
@@ -120,8 +134,16 @@ public class EvolutionState : MonoBehaviour {
 	List<Individual> BreedPopulation() {
 		List<Individual> newpop = new List<Individual>();
 
-		//breed individuals and place them on new population. We'll apply crossover and mutation later 
-		while(newpop.Count<populationSize) {
+        //vai buscar os X melhores elementos da pop atual para a nova
+        population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
+        for (int i = 0; i < ElitismNumber; i++)
+        {
+            newpop.Add(population[i].Clone());
+            //Debug.Log("Adicionar Elemento Macho, fitness = " + population[i].fitness);
+        }
+
+        //breed individuals and place them on new population. We'll apply crossover and mutation later 
+        while (newpop.Count<populationSize) {
 			List<Individual> selectedInds = randomSelection.selectIndividuals(population,2); //we should propably always select pairs of individuals
 			for(int i =0; i< selectedInds.Count;i++) {
 				if(newpop.Count<populationSize) {
@@ -147,6 +169,8 @@ public class EvolutionState : MonoBehaviour {
 
 		return newpop;
 	}
+
+
 
 }
 

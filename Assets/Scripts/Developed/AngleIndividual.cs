@@ -60,20 +60,19 @@ public class AngleIndividual : Individual {
             y = last_y - y;
 
             //proteçao
-            if(y > MaxY)
+            if(y >= MaxY)
             {
-                y = MaxY;
+                y = MaxY-0.0001f;
             }
-            else if (y < MinY)
+            else if (y <= MinY)
             {
-                y = MinY;
+                y = MinY+0.0001f;
             }
 
             trackPoints.Add(info.startPointX + (i+1) * step, y);
             last_y = y;
         }
         trackPoints.Add(info.endPointX, info.endPointY); //endpoint
-        //the representation used in the example individual is a list of trackpoints, no need to convert
     }
 
     public override void CalcFitness()
@@ -97,9 +96,15 @@ public class AngleIndividual : Individual {
         angles = new List<float>();
         float y = 0;
 
+        float minimum_angle, maximum_angle;
+        float step = (info.endPointX - info.startPointX) / (info.numTrackPoints - 1);
+        float alpha = Mathf.Atan(step / (MaxY - MinY)) * Mathf.Rad2Deg;
+        minimum_angle = alpha;
+        maximum_angle = 180 - alpha;
+
         for (int i = 0; i < info.numTrackPoints-2; i++)
         {
-            y = NormalizedRandom(0, 180);
+            y = NormalizedRandom(minimum_angle, maximum_angle);
             angles.Add(y);
         }
     }
@@ -111,17 +116,22 @@ public class AngleIndividual : Individual {
         {
             if (UnityEngine.Random.Range(0f, 1f) < probability)
             {
-                float maximum = 180, minimum = 0;
+                float minimum_angle, maximum_angle;
+                float step = (info.endPointX - info.startPointX) / (info.numTrackPoints - 1);
+                float alpha = Mathf.Atan(step / (MaxY - MinY)) * Mathf.Rad2Deg;
+                minimum_angle = alpha;
+                maximum_angle = 180 - alpha;
+
                 float mean = angles[i];
-                float sigma = (maximum - mean) / 3;
+                float sigma = (maximum_angle - mean) / 3;
                 float value = (NextGaussianDouble() * sigma + mean);
-                if (value < minimum)
+                if (value < minimum_angle)
                 {
-                    value = minimum;
+                    value = minimum_angle;
                 }
-                else if (value > maximum)
+                else if (value > maximum_angle)
                 {
-                    value = maximum;
+                    value = maximum_angle;
                 }
 
                 angles[i] = value;
