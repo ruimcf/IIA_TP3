@@ -68,7 +68,7 @@ public class EvolutionState : MonoBehaviour {
 	void FixedUpdate () {
 		if (evolving) {
 			EvolStep ();
-		} else if(drawing) {
+        } else if(drawing) {
 			population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
 			drawer.drawCurve(population[0].trackPoints,info);
 			drawing=false;
