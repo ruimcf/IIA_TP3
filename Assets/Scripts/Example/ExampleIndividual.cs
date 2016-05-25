@@ -160,10 +160,31 @@ public class ExampleIndividual : Individual {
 		}
 	}
 
-    void N_pointCrossover(Individual partner, float probability, int nPoints)
-    {
+    void N_pointCrossover(Individual partner, float probability, int nPoints){
+		if (UnityEngine.Random.Range (0f, 1f) > probability) {
+			return;
+		}
+		List<float> keys = new List<float>(trackPoints.Keys);
+		List<float> array = new List<float>();
+		for(int i =0;i<nPoints;i++){
+			int k = UnityEngine.Random.Range (0, keys.Count );
+			while(array.Contains(keys[k]))
+				k = UnityEngine.Random.Range (0, keys.Count );
+			array.Add(keys[k]);
+		}
+		bool flag = true;
+		for(int i=0;i<info.numTrackPoints;i++){
+			if(array.Contains(keys[i]))
+				flag = !flag;
+			if(flag){
+				float tmp = trackPoints[keys[i]];
+				trackPoints[keys[i]] = partner.trackPoints[keys[i]];
+				partner.trackPoints[keys[i]]=tmp;
+			}
+		}
 
-    }
+
+	}
 
 
     public float NextGaussianDouble()
