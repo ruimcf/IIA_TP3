@@ -41,9 +41,14 @@ public class EvolutionState : MonoBehaviour {
 
 	private PolygonGenerator drawer;
 
+    public int NumTestes;
+    private int contador=0;
+    private float bestacum=0, mediaacum=0, worstacum=0, desvioacum=0;
+
 
 	bool evolving;
 	bool drawing;
+    
 
 	// Use this for initialization
 	void Start () {
@@ -91,7 +96,26 @@ public class EvolutionState : MonoBehaviour {
 			population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
 			drawer.drawCurve(population[0].trackPoints,info);
 			drawing=false;
-		}
+
+            contador++;
+            if(contador >= NumTestes)
+            {
+
+                bestacum += stats.bestFitness[stats.bestFitness.Count - 1];
+                mediaacum += stats.meanFitness[stats.meanFitness.Count - 1];
+                worstacum += stats.worstFitness[stats.worstFitness.Count - 1];
+                desvioacum += stats.desvioPadraoFitness[stats.desvioPadraoFitness.Count - 1];
+                Debug.Log("\tbest: " + bestacum/NumTestes + "\tmean: " + mediaacum/NumTestes + "\tworst: " + worstacum/NumTestes + "\tdesvio padrao: " + desvioacum/30 + "\n");
+            }
+            else
+            {
+                bestacum += stats.bestFitness[stats.bestFitness.Count - 1];
+                mediaacum += stats.meanFitness[stats.meanFitness.Count - 1];
+                worstacum += stats.worstFitness[stats.worstFitness.Count - 1];
+                desvioacum += stats.desvioPadraoFitness[stats.desvioPadraoFitness.Count - 1];
+                Start();
+            }
+        }
 	}
 
 	void EvolStep() {
