@@ -113,7 +113,13 @@ public class EvolutionState : MonoBehaviour {
 				population = BreedPopulation();
 				evaluatedIndividuals=0;
 				currentGeneration++;
-			}
+                for (int i = 0; i < info.numTrackPoints; i++)
+                {
+                    if (population[0].trackPoints.ContainsKey(i) && population[0].trackPoints.ContainsKey(i + 1))
+                        Debug.DrawLine(new Vector2(i, population[0].trackPoints[i]), new Vector2(i + 1, population[0].trackPoints[i + 1]));
+                }
+            }
+
 			
 		} else {
 			stats.finalLog();

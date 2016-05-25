@@ -42,13 +42,13 @@ public class ExampleIndividual : Individual {
         switch (crossoverType)
         {
             case (1):
-                HalfCrossover((AngleIndividual)partner, probability);
+                HalfCrossover((ExampleIndividual)partner, probability);
                 break;
             case (2):
-                N_loopCrossover((AngleIndividual)partner, probability, nPoints);
+                N_loopCrossover((ExampleIndividual)partner, probability, nPoints);
                 break;
             case (3):
-                N_pointCrossover((AngleIndividual)partner, probability, nPoints);
+                N_pointCrossover((ExampleIndividual)partner, probability, nPoints);
                 break;
             default:
                 throw new System.Exception("Inserir CrossOver Type valido:\t1-HalfCrossover\t2-N Loop Crossover\t3-N Point Crossover");
@@ -118,9 +118,9 @@ public class ExampleIndividual : Individual {
                 {
                     value = MinY;
                 }
-                else if (value > MaxY)
+                else if (value >= MaxY-0.0001f)
                 {
-                    value = MaxY;
+                    value = MaxY-0.0001f;
                 }
 
                 trackPoints[x] = value;
