@@ -48,12 +48,22 @@ public class AngleIndividual : Individual {
         }
     }
 
-    public override void Crossover(Individual partner, float probability, int nPoints)
+    public override void Crossover(Individual partner, float probability, int nPoints, int crossoverType)
     {
-        if (nPoints > 2)
-            N_PointCrossover(partner, probability, nPoints);
-        else
-            HalfCrossover((AngleIndividual)partner, probability);
+        switch (crossoverType)
+        {
+            case (1):
+                HalfCrossover((AngleIndividual)partner, probability);
+                break;
+            case (2):
+                N_loopCrossover((AngleIndividual)partner,probability, nPoints);
+                break;
+            case (3):
+                N_pointCrossover((AngleIndividual)partner, probability, nPoints);
+                break;
+            default:
+                throw new System.Exception("Inserir CrossOver Type valido:\t1-HalfCrossover\t2-N Loop Crossover\t3-N Point Crossover");
+        }
     }
 
     public override void CalcTrackPoints()
@@ -181,7 +191,7 @@ public class AngleIndividual : Individual {
     }
 
 
-    void N_PointCrossover(Individual partner, float probability, int nPoints)
+    void N_loopCrossover(Individual partner, float probability, int nPoints)
     {
         if (UnityEngine.Random.Range(0f, 1f) > probability)
         {
@@ -198,6 +208,12 @@ public class AngleIndividual : Individual {
             }
         }
     }
+
+    void N_pointCrossover(Individual partner, float probability, int nPoints)
+    {
+
+    }
+
     /*http://answers.unity3d.com/questions/421968/normal-distribution-random.html */
     public float NormalizedRandom(float minimum, float maximum)
     {
