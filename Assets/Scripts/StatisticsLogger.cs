@@ -42,7 +42,7 @@ public class StatisticsLogger {
 
 	//saves fitness info and writes to console
 	public void PostGenLog(List<Individual> pop, int currentGen) {
-		pop.Sort((x, y) => x.fitness.CompareTo(y.fitness));
+		//pop.Sort((x, y) => x.fitness.CompareTo(y.fitness));
 
         float media = 0f;
 	

@@ -2,7 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
+
+
 public class PolygonGenerator {
+
+    private bool flag = true;
 
 	private Vector2 startposition;
 	private Vector2[] vertices2D;
@@ -45,7 +50,21 @@ public class PolygonGenerator {
 		MeshFilter filter = curve.AddComponent(typeof(MeshFilter)) as MeshFilter;
 		filter.mesh = msh;
         //define a cor da linha, RED == SWAG
-		rend.material.SetColor("_Color", Color.red);
+
+        Material m = new Material(Shader.Find("Standard"));
+        m.SetFloat("_Mode", 3);
+        m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        m.SetInt("_ZWrite", 0);
+        m.DisableKeyword("_ALPHATEST_ON");
+        m.EnableKeyword("_ALPHABLEND_ON");
+        m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        m.renderQueue = 3000;
+
+        rend.material = m;
+
+        rend.material.SetColor("_Color", Color.red);
+        rend.material.SetColor("_Color", new Color(1,0,0,0.5f));
 		curve.AddComponent (typeof(MeshCollider));
 		}
 }

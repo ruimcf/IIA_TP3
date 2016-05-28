@@ -118,9 +118,9 @@ public class ExampleIndividual : Individual {
                 {
                     value = MinY;
                 }
-                else if (value >= MaxY-0.0001f)
+                else if (value >= MaxY-0.01f)
                 {
-                    value = MaxY-0.0001f;
+                    value = MaxY-0.01f;
                 }
 
                 trackPoints[x] = value;

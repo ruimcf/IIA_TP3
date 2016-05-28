@@ -99,18 +99,26 @@ public class EvolutionState : MonoBehaviour {
 		if (evolving) {
 			EvolStep ();
         } else if(drawing) {
+            float min=100000;
+            int index=0;
             for(int i =0; i < population.Count; i++)
             {
                 population[i].evaluate();
+                if (population[i].fitness < min)
+                {
+                    min = population[i].fitness;
+                    index = i;
+                }
             }
-			population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
-			drawer.drawCurve(population[0].trackPoints,info);
+			//population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
+			drawer.drawCurve(population[index].trackPoints,info);
 			drawing=false;
 
             contador++;
             if(contador >= NumTestes)
             {
                 stats.finalLog();
+                GameObject.Find("New Game Object").GetComponent<Renderer>().sharedMaterial.SetFloat("_Mode", 3f);
                 Debug.Log("Testing done.");
             }
             else
