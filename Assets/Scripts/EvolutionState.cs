@@ -35,15 +35,15 @@ public class EvolutionState : MonoBehaviour {
 	private int currentGeneration;
 	public int EvaluationsPerStep;
 
-	private StatisticsLogger stats;
+
 	public string statsFilename;
 
-
+	private StatisticsLogger stats;
 	private PolygonGenerator drawer;
 
     public int NumTestes;
     private int contador=0;
-    private float bestacum=0, mediaacum=0, worstacum=0, desvioacum=0;
+
 
 
 	bool evolving;
@@ -77,7 +77,13 @@ public class EvolutionState : MonoBehaviour {
                 throw new System.Exception("Inserir Seletion Type valido:\t1-Random\t2-Tournament\t3-Roulette");
         }
        
-		stats = new StatisticsLogger (statsFilename);
+        //iniciar as estatisticas
+		if(contador == 0)
+        {
+            Debug.Log("A inicializar estatisticas");
+            stats = new StatisticsLogger(statsFilename, numGenerations);
+            stats.setNumTest(NumTestes);
+        }
 
 		drawer = new PolygonGenerator ();
 
@@ -93,6 +99,10 @@ public class EvolutionState : MonoBehaviour {
 		if (evolving) {
 			EvolStep ();
         } else if(drawing) {
+            for(int i =0; i < population.Count; i++)
+            {
+                population[i].evaluate();
+            }
 			population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
 			drawer.drawCurve(population[0].trackPoints,info);
 			drawing=false;
@@ -100,19 +110,11 @@ public class EvolutionState : MonoBehaviour {
             contador++;
             if(contador >= NumTestes)
             {
-
-                bestacum += stats.bestFitness[stats.bestFitness.Count - 1];
-                mediaacum += stats.meanFitness[stats.meanFitness.Count - 1];
-                worstacum += stats.worstFitness[stats.worstFitness.Count - 1];
-                desvioacum += stats.desvioPadraoFitness[stats.desvioPadraoFitness.Count - 1];
-                Debug.Log("\tbest: " + bestacum/NumTestes + "\tmean: " + mediaacum/NumTestes + "\tworst: " + worstacum/NumTestes + "\tdesvio padrao: " + desvioacum/30 + "\n");
+                stats.finalLog();
+                Debug.Log("Testing done.");
             }
             else
             {
-                bestacum += stats.bestFitness[stats.bestFitness.Count - 1];
-                mediaacum += stats.meanFitness[stats.meanFitness.Count - 1];
-                worstacum += stats.worstFitness[stats.worstFitness.Count - 1];
-                desvioacum += stats.desvioPadraoFitness[stats.desvioPadraoFitness.Count - 1];
                 Start();
             }
         }
@@ -146,10 +148,9 @@ public class EvolutionState : MonoBehaviour {
 
 			
 		} else {
-			stats.finalLog();
 			evolving=false;
 			drawing = true;
-			print ("evolution stopped");
+			print ("Test "+contador+" done. Evolution stopped");
 		}
 		
 		
