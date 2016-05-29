@@ -25,12 +25,6 @@ public class AngleIndividual : Individual {
     public override void Initialize()
     {
         AngleInitialization();
-        string angulos = "";
-
-        foreach(float x in angles)
-        {
-            angulos += "| " + x;
-        }
     }
 
     public override void Mutate(float probability, int MutationType)

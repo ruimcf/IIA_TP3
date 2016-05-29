@@ -56,8 +56,21 @@ public class ExampleIndividual : Individual {
     }
 
 	public override void CalcTrackPoints() {
-		//the representation used in the example individual is a list of trackpoints, no need to convert
-	}
+        List<float> keys = new List<float>(trackPoints.Keys);
+        foreach (float x in keys)
+        {
+            //make sure that the startpoint and the endpoint are not mutated 
+            if (Math.Abs(x - info.startPointX) < 0.01 || Math.Abs(x - info.endPointX) < 0.01)
+            {
+                continue;
+            }
+            if (trackPoints[x] > MaxY - 0.1f)
+            {
+                trackPoints[x] = MaxY - 0.1f;
+            }
+        }
+        //the representation used in the example individual is a list of trackpoints, no need to convert
+    }
 
 	public override void CalcFitness() {
 		fitness = eval.time; //in this case we only consider time

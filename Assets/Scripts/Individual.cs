@@ -32,7 +32,12 @@ public abstract class Individual {
 	public void evaluate() {
 		CalcTrackPoints ();
 		eval = problem.evaluate (trackPoints);
-		CalcFitness ();
+        if (float.IsInfinity(eval.time))
+        {
+            Initialize();
+            evaluate();
+        }
+        CalcFitness ();
 
 	}
 
